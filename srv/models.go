@@ -2,7 +2,8 @@ package srv
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
+	"log"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -39,16 +40,22 @@ func (data *Location) Save(session *mgo.Session) {
 	c := session.DB(DatabaseName).C(collectionName)
 	err := c.Insert(data)
 	if err != nil {
-		fmt.Print(err.Error())
+		log.Print("[SAVE ERROR] - " + err.Error())
 	}
 }
 
 // SerializeLocation serializes from string into bson data
+// 2601-0000-3690-072 FIXME PASSPORT NUMBER
 func SerializeLocation(line []byte) (Location, error) {
 	data := Location{}
 	err := json.Unmarshal(line, &data)
 	if err != nil {
 		return data, err
 	}
+
+	if data.Locate.Type == "" {
+		return data, errors.New("Invalid Data Format")
+	}
+
 	return data, nil
 }

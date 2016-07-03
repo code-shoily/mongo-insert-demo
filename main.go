@@ -1,9 +1,9 @@
 package main
 
 import (
+	"log"
 	"net"
 	"strconv"
-	"sync"
 
 	"gopkg.in/mgo.v2"
 
@@ -11,14 +11,16 @@ import (
 )
 
 func main() {
+	srv.SetLogger()
+
 	server, err := net.Listen("tcp", ":"+strconv.Itoa(srv.NetPort))
-	session, err := mgo.Dial(srv.MongoHost)
 	if err != nil {
-		panic(err.Error())
+		log.Fatal("[NET ERROR] - " + err.Error())
 	}
 
+	session, err := mgo.Dial(srv.MongoHost)
 	if err != nil {
-		panic(err.Error())
+		log.Fatal("[MONGO ERROR] - " + err.Error())
 	}
 
 	// Setting up TCP connections
@@ -26,10 +28,9 @@ func main() {
 
 	// Setting up Mongo parameters
 	session.SetMode(mgo.Monotonic, true)
-	var waitGroup sync.WaitGroup
-	waitGroup.Add(10)
 
+	log.Println("Server listening at port: " + strconv.Itoa(srv.NetPort))
 	for {
-		go srv.HandleConnection(<-connections, &waitGroup, session)
+		go srv.HandleConnection(<-connections, session)
 	}
 }

@@ -2,9 +2,8 @@ package srv
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"net"
-	"sync"
 
 	"gopkg.in/mgo.v2"
 )
@@ -18,11 +17,11 @@ func ClientConnections(listener net.Listener) chan net.Conn {
 		for {
 			client, err := listener.Accept()
 			if err != nil {
-				fmt.Println(err.Error())
+				log.Println(err.Error())
 				continue
 			}
 			i++
-			fmt.Printf("%d: %v <-> %v\n", i, client.LocalAddr(), client.RemoteAddr())
+			log.Printf("[INFO] - %d: %v <-> %v\n", i, client.LocalAddr(), client.RemoteAddr())
 			ch <- client
 		}
 	}()
@@ -32,8 +31,7 @@ func ClientConnections(listener net.Listener) chan net.Conn {
 
 // HandleConnection handles the connection. In this case, inserts the received
 // string into the store by first converting it to JSON format.
-func HandleConnection(client net.Conn, waitGroup *sync.WaitGroup, session *mgo.Session) {
-	defer waitGroup.Done()
+func HandleConnection(client net.Conn, session *mgo.Session) {
 	sessionCopy := session.Copy()
 	defer sessionCopy.Close()
 
@@ -47,11 +45,10 @@ func HandleConnection(client net.Conn, waitGroup *sync.WaitGroup, session *mgo.S
 
 		data, err := SerializeLocation(line)
 		if err != nil {
-			fmt.Println(err.Error())
-			client.Write([]byte(err.Error()))
+			log.Println("[SERIALIZER ERROR] - " + err.Error())
 			client.Close()
+			break
 		}
-
 		data.Save(sessionCopy)
 		client.Close()
 	}
