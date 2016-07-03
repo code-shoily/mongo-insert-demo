@@ -5,4 +5,7 @@ Sanitized data will be fed from another process and it will just parse the JSON 
 
 This is meant to run only on `localhost` so that another process residing in the same machine can access it and no external access is possible.
 
-Please install all dependancies by typing `go get`
+## Installation Instructions
+
+* Type in the command `git clone https://github.com/code-shoily/mongo-insert-demo.git insert_server`
+* Install all dependancies by typing `go get`
