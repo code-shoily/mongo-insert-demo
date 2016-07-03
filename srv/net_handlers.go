@@ -46,7 +46,7 @@ func HandleConnection(client net.Conn, waitGroup *sync.WaitGroup, session *mgo.S
 		}
 
 		// TODO Convert this into SerializeLocation for real data
-		data, err := SerializeTodo(line)
+		data, err := SerializeLocation(line)
 		if err != nil {
 			fmt.Println(err.Error())
 			client.Write([]byte(err.Error()))

@@ -17,21 +17,21 @@ type Loc struct {
 
 // Location is an abstraction of the location string to be inserted into the database
 type Location struct {
-	Number            string        `bson:"number"`
-	ID                bson.ObjectId `bson:"_id,omitempty"`
-	AcSensor          bool          `bson:"ac_sensor"`
-	Active            bool          `bson:"active"`
-	Bearing           float64       `bson:"bearing"`
-	Door1Sensor       bool          `bson:"door1_sensor"`
-	Door2Sensor       bool          `bson:"door2_sensor"`
-	Door3Sensor       bool          `bson:"door3_sensor"`
-	Door4Sensor       bool          `bson:"door4_sensor"`
-	EngineSensor      bool          `bson:"engine_sensor"`
-	Locate            Loc           `bson:"loc"`
-	Speed             float64       `bson:"speed"`
-	Status            string        `bson:"status"`
-	TemperatureSensor bool          `bson:"temperature_sensor"`
-	Time              time.Time     `bson:"time"`
+	Number string `json:"number" bson:"-"`
+	// ID                bson.ObjectId `bson:"_id,omitempty"`
+	AcSensor          bool      `json:"ac_sensor" bson:"ac_sensor"`
+	Active            bool      `json:"active" bson:"active"`
+	Bearing           float32   `json:"bearing" bson:"bearing"`
+	Door1Sensor       bool      `json:"door1_sensor" bson:"door1_sensor"`
+	Door2Sensor       bool      `json:"door2_sensor" bson:"door2_sensor"`
+	Door3Sensor       bool      `json:"door3_sensor" bson:"door3_sensor"`
+	Door4Sensor       bool      `json:"door4_sensor" bson:"door4_sensor"`
+	EngineSensor      bool      `json:"engine_sensor" bson:"engine_sensor"`
+	Locate            Loc       `json:"loc" bson:"loc"`
+	Speed             float32   `json:"speed" bson:"speed"`
+	Status            string    `json:"status" bson:"status"`
+	TemperatureSensor float32   `json:"temperature_sensor" bson:"temperature_sensor"`
+	Time              time.Time `json:"time" bson:"time"`
 }
 
 // Save saves the struct as mongo document
