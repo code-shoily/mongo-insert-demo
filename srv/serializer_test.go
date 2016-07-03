@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// SingleLineJSON is important for testing in telnet.
+// SingleLineJSON is convenient for testing in telnet.
 const SingleLineJSON string = `
 {"status":"A","bearing":136.67,"door4_sensor":false,"door2_sensor":false,"number":"XMVT863071010819875","engine_sensor":false,"door3_sensor":false,"active":true,"door1_sensor":false,"ac_sensor":false,"speed":0.0,"loc":{"type":"Point","coordinates":[90.36850666666666,23.74985]},"time":"2016-07-03T12:09:54.035402+00:00","temperature_sensor":0.0}
 `
