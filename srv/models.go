@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 // Loc depicts the latitude and longitude of an asset
@@ -52,41 +51,4 @@ func SerializeLocation(line []byte) (Location, error) {
 		return data, err
 	}
 	return data, nil
-}
-
-//<-- TODO SNIP ME - This is to be used for smaller data -->//
-
-// SerializeTodo serilizes the JSON string into native golang struct
-func SerializeTodo(line []byte) (TodoList, error) {
-	data := TodoList{}
-	err := json.Unmarshal(line, &data)
-	if err != nil {
-		return data, err
-	}
-	return data, nil
-}
-
-// Todo shorter test model
-type Todo struct {
-	Priority    int    `json:"priority" bson:"priority"`
-	Description string `json:"description" bson:"description"`
-	Completed   bool   `json:"completed" bson:"completed"`
-}
-
-// TodoList shorter container model
-type TodoList struct {
-	Number string        `json:"number" bson:"-"`
-	ID     bson.ObjectId `bson:"_id,omitempty"`
-	Title  string        `json:"title" bson:"title"`
-	List   Todo          `json:"list" bson:"list"`
-}
-
-// Save saves the struct as mongo document
-func (data *TodoList) Save(session *mgo.Session) {
-	collectionName := "asset_" + data.Number
-	c := session.DB("vts").C(collectionName)
-	err := c.Insert(data)
-	if err != nil {
-		fmt.Print(err.Error())
-	}
 }
